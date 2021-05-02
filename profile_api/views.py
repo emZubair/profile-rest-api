@@ -1,10 +1,13 @@
 from rest_framework import status
+from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import TokenAuthentication
 
 from profile_api.models import UserProfile
+from profile_api.permissions import UpdateUserProfilePermission
 from profile_api.serializers import HelloSerializers, UserProfileSerializer
 
 
@@ -104,4 +107,8 @@ class UserProfileViewset(ModelViewSet):
     """ Handle user creation, updation & deletion """
 
     serializer_class = UserProfileSerializer
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (UpdateUserProfilePermission, )
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('name', 'email',)
     queryset = UserProfile.objects.all()
