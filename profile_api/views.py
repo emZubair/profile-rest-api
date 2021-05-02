@@ -2,8 +2,10 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from profile_api.serializers import HelloSerializers
+from profile_api.models import UserProfile
+from profile_api.serializers import HelloSerializers, UserProfileSerializer
 
 
 class HelloApiView(APIView):
@@ -96,3 +98,10 @@ class HelloViewsets(viewsets.ViewSet):
         """ Handle deleting an object """
 
         return Response({'http_methos': 'DELETE', 'pk': pk})
+
+
+class UserProfileViewset(ModelViewSet):
+    """ Handle user creation, updation & deletion """
+
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
