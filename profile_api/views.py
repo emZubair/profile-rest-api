@@ -7,9 +7,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.settings import api_settings
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from profile_api.models import UserProfile, ProfileFeedModel
-from profile_api.permissions import UpdateUserProfilePermission
+from profile_api.permissions import (
+    UpdateUserProfilePermission, UpdateOwnStatusPermission)
 from profile_api.serializers import (
     HelloSerializers, UserProfileSerializer, ProfileFeedSerializer)
 
@@ -128,6 +130,8 @@ class UserProfileFeedViewset(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     serializer_class = ProfileFeedSerializer
+    permission_classes = (UpdateOwnStatusPermission,
+                          IsAuthenticatedOrReadOnly)
     queryset = ProfileFeedModel.objects.all()
 
     def perform_create(self, serializer):
